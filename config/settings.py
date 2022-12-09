@@ -1,20 +1,24 @@
-import os
 import configparser
+import logging
+import os
+from typing import Any, Dict, List, Optional, Union
+
+from pydantic import AnyHttpUrl, BaseSettings, validator
+
 from client import zgw
 from models import endpoints
-from typing import Any, Dict, List, Optional, Union
-from pydantic import BaseSettings, AnyHttpUrl, validator
-from util.logger import logger
 
 
 class Settings(BaseSettings):
-    env = os.environ.get("ENV", "test")
-    logger.debug(f"env set to {env}")
+    PORT = os.environ.get("PORT", "8000")
+    logging.info(f"port set to {PORT}")
+    ENV = os.environ.get("ENV", "test")
+    logging.info(f"env set to {ENV}")
     config = configparser.ConfigParser()
     config.read("config.ini")
-    logger.debug(f"config set to {config[env]}")
-    zgw_endpoints = endpoints.end_points_from_dict(config[env])
-    logger.debug(f"endpoints set to {zgw_endpoints}")
+    logging.info(f"config set to {config[ENV]}")
+    zgw_endpoints = endpoints.end_points_from_dict(config[ENV])
+    logging.info(f"endpoints set to {zgw_endpoints}")
 
     VERSION: str = "0.0.1"
     API_V1_STR: str = "/api/v1"
@@ -45,4 +49,4 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
-logger.debug(settings)
+logging.info(settings)

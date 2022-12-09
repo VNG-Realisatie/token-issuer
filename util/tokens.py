@@ -1,5 +1,6 @@
-import jwt
 import time
+
+import jwt
 
 
 def create_token(identifier: str, secret: str):

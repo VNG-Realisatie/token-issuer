@@ -1,11 +1,12 @@
+import logging
+
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
-from util import randomizer, tokens
-from util.logger import logger
+
 from config.settings import settings
 from models import response
 from models import user as models
-
+from util import randomizer, tokens
 
 router = APIRouter()
 
@@ -58,8 +59,8 @@ def create_propagated_user(user: models.User):
     if created.status_code != 201:
         return JSONResponse(status_code=400, content={"message": created.json()})
 
-    logger.debug(f"got a response {str(created.status_code)} when creating new user")
-    logger.info(
+    logging.debug(f"got a response {str(created.status_code)} when creating new user")
+    logging.info(
         f"created client_id {created.json()['clientIds']} in the autorisatieapi"
     )
 
@@ -73,8 +74,7 @@ def create_propagated_user(user: models.User):
     else:
         propagated = settings.ZGW_CLIENT.propagate_to_all_apis(user_ids, secret)
 
-    logger.info(f"propagated to all apis result: {str(propagated)}")
+    logging.info(f"propagated to all apis result: {str(propagated)}")
 
     token = tokens.create_token(user_ids[0], secret)
-    return {"authorization": f"Bearer {token}",
-            "propagated": propagated}
+    return {"authorization": f"Bearer {token}", "propagated": propagated}

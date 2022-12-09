@@ -1,8 +1,13 @@
 from fastapi import APIRouter
-from api.v1.endpoints import tokens, register
+
+from api.v1.endpoints import register, status, tokens
 
 # this is used to create tags in the swagger and openapi docs
 tags_metadata = [
+    {
+        "name": "status",
+        "description": "Status of the API",
+    },
     {
         "name": "register",
         "description": "Propagate a clientIds and secret over multiple APIs",
@@ -20,3 +25,4 @@ tags_metadata = [
 api_router = APIRouter()
 api_router.include_router(tokens.router)
 api_router.include_router(register.router)
+api_router.include_router(status.router)

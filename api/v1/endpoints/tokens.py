@@ -1,8 +1,8 @@
 from fastapi import APIRouter
-from util import tokens
-from models import token as models
-from models import response
 
+from models import response
+from models import token as models
+from util import tokens
 
 router = APIRouter()
 

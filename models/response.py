@@ -1,6 +1,10 @@
 from pydantic import BaseModel
 
 
+class Health(BaseModel):
+    health: bool
+
+
 class Propagation(BaseModel):
     endpoint: str
     success: bool

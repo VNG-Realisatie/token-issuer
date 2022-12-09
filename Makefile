@@ -1,7 +1,7 @@
 git_short_hash = `git rev-parse --short HEAD`
 project_name = 'token-issuer'
 image := $(shell docker images -q ${project_name}:${git_short_hash})
-tag = 'local5'
+tag = '0.1.0'
 
 create-image-tagged:
 	echo "creating image"

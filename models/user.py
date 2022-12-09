@@ -1,7 +1,7 @@
-from pydantic import BaseModel
 from dataclasses import dataclass
-from typing import List, Optional, Any, TypeVar, Callable, Type, cast
+from typing import Any, Callable, List, Optional, Type, TypeVar, cast
 
+from pydantic import BaseModel
 
 T = TypeVar("T")
 
