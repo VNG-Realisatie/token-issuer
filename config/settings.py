@@ -26,6 +26,7 @@ class Settings(BaseSettings):
     TOKEN_ISSUER_SECRET: str = os.environ.get("TOKEN_ISSUER_SECRET")
     TOKEN_ISSUER_IDENTIFIER: str = os.environ.get("TOKEN_ISSUER_IDENTIFIER")
     ZGW_CLIENT = zgw.Client(endpoints=zgw_endpoints)
+    HOSTS = os.environ.get("ALLOWED_HOSTS").split(",")
 
     @validator("BACKEND_CORS_ORIGINS", pre=True)
     def assemble_cors_origins(cls, v: Union[str, List[str]]) -> Union[List[str], str]:
