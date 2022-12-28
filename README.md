@@ -101,11 +101,12 @@ curl --request POST \
 
 Er is een aantal variabelen die te zetten zijn om de werking te bepalen.
 
-| Key                                    | Example                         | Description                                                                   |
-|----------------------------------------|---------------------------------|-------------------------------------------------------------------------------|
-| ENV                                    | kubernetes                      | Variabele die bepaalt welke configuratie uit het INI bestand wordt gelezen     |
-| TOKEN_ISSUER_NAME                      | token-issuer-test               | Variabele die in elke api gezet gaat worden als clientId                       |
-| TOKEN_ISSUER_SECRET                    | supersecretsecret               | Variabele voor de validatie van de TOKEN_ISSUER_NAME                           |
+| Key                 | Example                                  | Description                                                                |
+|---------------------|------------------------------------------|----------------------------------------------------------------------------|
+| ENV                 | kubernetes                               | Variabele die bepaalt welke configuratie uit het INI bestand wordt gelezen |
+| TOKEN_ISSUER_NAME   | token-issuer-test                        | Variabele die in elke api gezet gaat worden als clientId                   |
+| TOKEN_ISSUER_SECRET | supersecretsecret                        | Variabele voor de validatie van de TOKEN_ISSUER_NAME                       |
+| ALLOWED_HOSTS       | 'k8s-tokens-local.test,localhost,tokens' | Variabelen die bepalen welke hosts toegestaan worden                       | 
 
 
 ## Scopes
