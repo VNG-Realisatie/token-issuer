@@ -27,4 +27,4 @@ README.md
 test_main.http
 fixture
 .idea
-sql_authorend.db
+__pycache__
