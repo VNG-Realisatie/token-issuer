@@ -1,11 +1,11 @@
 # ZGW Token Issuer
 
-| Key       | Value                                           |
-|-----------|-------------------------------------------------|
-| Version   | 1.0.0                                           |
-| Source    | https://github.com/VNG-Realisatie/token-issuer  |
-| Keywords  | ZGW, tooling                                    |
-| Related   | https://github.com/VNG-Realisatie/token-seeder  |
+| Key       | Value                                          |
+|-----------|------------------------------------------------|
+| Version   | 0.0.2                                          |
+| Source    | https://github.com/VNG-Realisatie/token-issuer |
+| Keywords  | ZGW, tooling                                   |
+| Related   | https://github.com/VNG-Realisatie/token-seeder |
 
 
 ## Introductie
@@ -15,38 +15,62 @@ Onderdeel van deze API's is een autorisatie module, de [Autorisaties API](https:
 Deze tokens dienen genereerd en ingericht te worden in de verschillende API's. 
 
 Om de problemen met de bestaande tokentool op te lossen en deze bijvoorbeeld ook op de (nieuwe) testomgeving te laten werken is een nieuwe tokentool ontwikkeld. 
-Bijkomend voordeel is dat de nieuwe tokentool, ontwikkeld met FastAPI, nu ook binnen onze eigen omgeving draait.
+Bijkomend voordeel is dat de nieuwe tokentool nu ook binnen onze eigen omgeving draait.
 
-De werking heeft de GUI achterwege gelaten en werkt nu als een pure restapi. Hierdoor is het aantal endpoints (en werking) sterk gedaald.
-
+Deze implementatie heeft de GUI achterwege gelaten en werkt nu als een pure restapi. Hierdoor is het aantal endpoints (en werking) sterk gedaald.
 
 ## Swagger en Redoc
 
 Bij de token-issuer is om de werking te vereenvoudigen swagger en redoc documentatie toegevoegd. Deze worden op het standaardadres geserveerd (zie onder).
 
-{base_address} dient vervangen te worden door de instelling van je `ingress` met een port-forward is het meestal `http://localhost:8000`.
-Alternatief kan het een dsn record zijn met `https://`
+`{BASE_ADDRESS}` dient vervangen te worden door de instelling van je `ingress` met een port-forward is het meestal `http://localhost:8000`.
+Alternatief kan het een dsn record zijn met `https://` zoals `https://zaken-auth.test.vng.cloud`.
 
 
 #### swagger:
 
-{base_address}/docs
+{BASE_ADDRESS}/docs
 
 #### redoc:
 
-{base_address}/redoc
+{BASE_ADDRESS}/redoc
 
 #### openapi
 
-{base_address}/api/v1/openapi.json
+{BASE_ADDRESS}/api/v1/openapi.json
 
 ## Werking
+
+Alvorens de commando's lokaal te draaien is het belangrijk te bepalen van welke omgeving je een token nodig hebt. 
+
+De urls ondersteund door team referentie implementaties zijn:
+
+- test: `https://zaken-auth.test.vng.cloud`
+- productie: `https://zaken-auth.vng.cloud`
+
+Wanneer je de token-issuer lokaal draait (bijvoorbeeld in minikube) kan dat een `localhost` zijn maar ook een `ingress` adres zoals beschreven bij _Swagger en Redoc_.
+
+Je kunt eenvoudig het `{BASE_ADDRESS}` vervangen met de volgende commando's
+
+Test:
+
+```shell
+export BASE_ADDRESS=https://zaken-auth.test.vng.cloud
+```
+
+Productie:
+
+```shell
+export BASE_ADDRESS=https://zaken-auth.vng.cloud
+```
+
+Onderstaande commando's kunnen ook geplakt worden in API tooling zoals postman of insomnia. 
 
 ### Admin token
 
 ```shell
-curl --request POST \
-  --url http://localhost:5001/api/v1/register \
+curl -L --request POST \
+  --url $BASE_ADDRESS/api/v1/register \
   --header 'Content-Type: application/json' \
   --data '{
   "clientIds": [
@@ -60,8 +84,8 @@ curl --request POST \
 
 ### Token met scopes
 ```shell
-curl --request POST \
-  --url http://localhost:5001/api/v1/register \
+curl -L --request POST \
+  --url $BASE_ADDRESS/api/v1/register \
   --header 'Content-Type: application/json' \
   --data '{
   "clientIds": [
@@ -88,8 +112,8 @@ curl --request POST \
 
 ### Bestaande secret - id combinatie hergeneren
 ```shell
-curl --request POST \
-  --url http://localhost:5001/api/v1/tokens \
+curl -L --request POST \
+  --url $BASE_ADDRESS/api/v1/tokens \
   --header 'Content-Type: application/json' \
   --data '{
 	"client_id": ["sometestwithatoken-I0xPKpr8y0Jx"],
@@ -207,13 +231,12 @@ Het is echter de verantwoording van de consumer om de juiste scopes te gebruiken
 
 ## Links
 
-* Deze tooling is onderdeel van de [VNG standaard API's voor Zaakgericht werken](https://github.com/VNG-Realisatie/gemma-zaken).
 * Rapporteer [issues](https://github.com/VNG-Realisatie/token-seeder/issues) bij vragen, fouten of wensen.
 
 ## Licentie
 
 
-Copyright © VNG Realisatie 2022 - 
+Copyright © VNG Realisatie 2023 - 
 
 Licensed under the EUPL
 
