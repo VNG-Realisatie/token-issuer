@@ -6,10 +6,17 @@ from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from starlette.middleware.cors import CORSMiddleware
 
 from api.v1.api import api_router, tags_metadata
+from api.base.api import redirect_router
 from config.settings import settings
 
 description = """
 Token Issuer API helps you to create and propagate tokens to APIS. 🚀
+
+This API no longer has a GUI so it must be approached as a RESTful api.
+
+For more information see:
+
+https://github.com/VNG-Realisatie/token-issuer
 
 ## Token
 
@@ -58,6 +65,7 @@ app.add_middleware(
 )
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
+app.include_router(redirect_router)
 
 
 if __name__ == "__main__":

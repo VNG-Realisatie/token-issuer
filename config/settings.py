@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     zgw_endpoints = endpoints.end_points_from_dict(config[ENV])
     logging.info(f"endpoints set to {zgw_endpoints}")
 
-    VERSION: str = "0.0.1"
+    VERSION: str = "0.1.0"
     API_V1_STR: str = "/api/v1"
     BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
     TOKEN_ISSUER_SECRET: str = os.environ.get("TOKEN_ISSUER_SECRET")
