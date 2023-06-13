@@ -2,7 +2,7 @@
 
 | Key       | Value                                          |
 |-----------|------------------------------------------------|
-| Version   | 0.0.2                                          |
+| Version   | 0.1.0                                          |
 | Source    | https://github.com/VNG-Realisatie/token-issuer |
 | Keywords  | ZGW, tooling                                   |
 | Related   | https://github.com/VNG-Realisatie/token-seeder |
