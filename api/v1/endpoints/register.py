@@ -1,6 +1,6 @@
 import logging
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
 
 from config.settings import settings
@@ -17,7 +17,13 @@ router = APIRouter()
     responses={400: {"model": response.BadRequest}},
     tags=["register"],
 )
-def create_propagated_user(user: models.User):
+@router.post(
+    "/register",
+    response_model=response.TokenPropagated,
+    responses={400: {"model": response.BadRequest}},
+    tags=["register"],
+)
+async def create_propagated_user(user: models.User, request: Request):
     """
     Create the requested client_ids with different APIs.
 
@@ -57,7 +63,14 @@ def create_propagated_user(user: models.User):
     created = settings.ZGW_CLIENT.autorisatie.create_user(body=body)
 
     if created.status_code != 201:
-        return JSONResponse(status_code=400, content={"message": created.json()})
+        if settings.ENV.lower() == "kubernetes":
+            https_url = request.url.replace(scheme="https")
+            headers = {"Location": str(https_url)}
+            return JSONResponse(status_code=400, content={"message": created.json()}, headers=headers)
+
+        else:
+            return JSONResponse(status_code=400, content={"message": created.json()})
+
 
     logging.debug(f"got a response {str(created.status_code)} when creating new user")
     logging.info(
@@ -77,4 +90,21 @@ def create_propagated_user(user: models.User):
     logging.info(f"propagated to all apis result: {str(propagated)}")
 
     token = tokens.create_token(user_ids[0], secret)
-    return {"authorization": f"Bearer {token}", "propagated": propagated}
+    propagated_list = [
+        {
+            "endpoint": propagation.endpoint,
+            "success": propagation.success,
+            "client_id": propagation.client_id,
+        }
+        for propagation in propagated
+    ]
+
+    if settings.ENV.lower() == "kubernetes":
+        https_url = request.url.replace(scheme="https")
+        headers = {"Location": str(https_url)}
+        logging.info(https_url)
+        logging.info(headers)
+        return JSONResponse(status_code=200, content={"authorization": f"Bearer {token}", "propagated": propagated_list}, headers=headers)
+
+    else:
+        return JSONResponse(status_code=200, content={"authorization": f"Bearer {token}", "propagated": propagated_list})

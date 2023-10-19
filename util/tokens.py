@@ -9,8 +9,6 @@ def create_token(identifier: str, secret: str):
         "iss": identifier,
         "iat": int(time.time()),
         "client_id": identifier,
-        "user_id": "",
-        "user_representation": "",
     }
 
     headers = {"client_identifier": identifier}

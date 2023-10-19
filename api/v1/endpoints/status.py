@@ -1,6 +1,6 @@
 import logging
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
 
 from config.settings import settings
@@ -15,7 +15,13 @@ router = APIRouter()
     responses={400: {"model": response.Health}},
     tags=["status"],
 )
-async def check_health():
+@router.get(
+    "/status",
+    response_model=response.Health,
+    responses={400: {"model": response.Health}},
+    tags=["status"],
+)
+async def check_health(request: Request):
     """
     Check health before creating tokens:
 
@@ -25,4 +31,11 @@ async def check_health():
     status = settings.ZGW_CLIENT.check_availability_of_apis()
     if status:
         code = 200
-    return JSONResponse(status_code=code, content={"health": status})
+
+    if settings.ENV.lower() == "kubernetes":
+        https_url = request.url.replace(scheme="https")
+        headers = {"Location": str(https_url)}
+        return JSONResponse(status_code=code, content={"health": status}, headers=headers)
+
+    else:
+        return JSONResponse(status_code=code, content={"health": status})

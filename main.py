@@ -47,8 +47,8 @@ app = FastAPI(
     },
     openapi_tags=tags_metadata,
     openapi_url="/api/v1/openapi.json",
+    trusting_proxy=True,
 )
-
 
 # Set all CORS enabled origins
 if settings.BACKEND_CORS_ORIGINS:
@@ -59,6 +59,7 @@ if settings.BACKEND_CORS_ORIGINS:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
 
 app.add_middleware(
     TrustedHostMiddleware, allowed_hosts=settings.HOSTS
